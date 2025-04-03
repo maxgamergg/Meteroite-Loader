@@ -1,0 +1,104 @@
+/* Basis-Styling und Zentrierung */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.spinner-container {
+    perspective: 1000px;
+}
+
+/* Variablen */
+:root {
+    --cube-size: 100px;
+    --half-size: calc(var(--cube-size) / 2);
+    --single-face-duration: 1s;
+    --total-cycle-duration: calc(var(--single-face-duration) * 3);
+    --detach-distance: 25px;
+
+    --front-color: #C62D2D;
+    --top-color:   #E54B4B;
+    --left-color:  #E03C3C;
+
+}
+
+/* Der Würfel-Container */
+.cube {
+    width: var(--cube-size);
+    height: var(--cube-size);
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-30deg) rotateY(45deg); /* Isometrische Ansicht */
+}
+
+
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Basis-Positionierung & individuelle Farben NUR für die AKTIVEN Seiten */
+.front {
+    background-color: var(--front-color);
+    transform: rotateY(  0deg) translateZ(var(--half-size));
+    animation: animate-front var(--total-cycle-duration) infinite ease-in-out;
+}
+.top {
+    background-color: var(--top-color);
+    transform: rotateX( 90deg) translateZ(var(--half-size));
+    animation: animate-top   var(--total-cycle-duration) infinite ease-in-out;
+}
+.left {
+    background-color: var(--left-color);
+    transform: rotateY(-90deg) translateZ(var(--half-size));
+    animation: animate-left  var(--total-cycle-duration) infinite ease-in-out;
+}
+
+/* === Keyframes === */
+/* Jede Animation ist nur in ihrem 1/3 Zeitfenster aktiv und behält 180deg Rotation */
+
+/* 1. Front (0% bis 33.33%) */
+@keyframes animate-front {
+    0% { transform: rotateY(0deg) translateZ(var(--half-size)) rotateZ(0deg); }
+    8.33% { transform: rotateY(0deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(0deg); }
+    16.66% { transform: rotateY(0deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    25% { transform: rotateY(0deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    33.33% { transform: rotateY(0deg) translateZ(var(--half-size)) rotateZ(180deg); }
+    100% { transform: rotateY(0deg) translateZ(var(--half-size)) rotateZ(180deg); }
+}
+
+/* 2. Top (33.33% bis 66.66%) */
+@keyframes animate-top {
+    0%, 33.32% { transform: rotateX(90deg) translateZ(var(--half-size)) rotateZ(0deg); }
+    41.66% { transform: rotateX(90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(0deg); }
+    50% { transform: rotateX(90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    58.33% { transform: rotateX(90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    66.66% { transform: rotateX(90deg) translateZ(var(--half-size)) rotateZ(180deg); }
+    100% { transform: rotateX(90deg) translateZ(var(--half-size)) rotateZ(180deg); }
+}
+
+/* 3. Left (66.66% bis 100%) */
+@keyframes animate-left {
+    0%, 66.65% { transform: rotateY(-90deg) translateZ(var(--half-size)) rotateZ(0deg); }
+    75% { transform: rotateY(-90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(0deg); }
+    83.33% { transform: rotateY(-90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    91.66% { transform: rotateY(-90deg) translateZ(calc(var(--half-size) + var(--detach-distance))) rotateZ(180deg); }
+    100% { transform: rotateY(-90deg) translateZ(var(--half-size)) rotateZ(180deg); }
+}
+
+/* Den ganzen Würfel langsam drehen lassen */
+/*
+@keyframes spin-cube {
+    from { transform: rotateX(-30deg) rotateY(45deg); }
+    to   { transform: rotateX(-30deg) rotateY(405deg); }
+}
+.cube {
+    animation: spin-cube 15s infinite linear;
+}
+*/
